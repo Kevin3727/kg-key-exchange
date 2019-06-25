@@ -18,5 +18,15 @@ def create_password(password, username, loc='data/'):
         f.write(hashlib.sha256(password.encode()).digest())
 
 
+def get_hashed_password(username, loc='data/'):
+    location = get_location(username, loc)
+    if Path(location).is_file():
+        with open(location, 'rb') as f:
+            data = f.read()
+        return data
+    else:
+        return None
+
+
 def get_location(username, loc):
     return str(Path(loc) / str(username + '.dat'))

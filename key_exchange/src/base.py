@@ -21,7 +21,7 @@ class KeyExchange:
         hashed_password = hash_bytes(password.encode())
 
         new_pass = hashed_password + public_bytes
-        return hash_bytes(new_pass)
+        return self.encrypt_message(hash_bytes(new_pass))
 
     def decrypt_message(self, cipher_text):
         return self.__private_key.decrypt(
@@ -57,9 +57,9 @@ class KeyExchange:
             encoding=serialization.Encoding.DER,
             format=serialization.PublicFormat.PKCS1)
 
-    def returned_client_packet(self, username, loc='data/'):
+    def authenticate_client(self, username, client_packet, loc='data/'):
         public_bytes = self.get_public_bytes(self.public_key)
         hashed_password = get_hashed_password(username, loc)
 
         new_pass = hashed_password + public_bytes
-        return hash_bytes(new_pass)
+        return hash_bytes(new_pass) == self.decrypt_message(client_packet)

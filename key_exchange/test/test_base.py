@@ -47,9 +47,10 @@ def test_client_packet():
     pass_management.create_password('password', 'pytest_username', loc='data/')
     ke = KeyExchange()
     ke.generate_private_key()
-    assert ke.client_packet('password',
-                            ke.public_key) == ke.returned_client_packet(
-        'pytest_username', loc='data/')
+    assert ke.authenticate_client(
+        'pytest_username',
+        ke.client_packet('password', ke.public_key),
+        loc='data/')
 
     os.remove(
         str(Path(pass_management.get_location('pytest_username', 'data/'))))

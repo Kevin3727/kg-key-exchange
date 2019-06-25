@@ -16,11 +16,16 @@ failed.
 ke.generate_private_key()
 ```
 send `ke.public_key` to the client.
-The packet that is received from the client must be equal to:
+Use the first packet that is received from the client (`client_packet`) in the
+function below.
 ```python
-ke.returned_client_packet(username, loc='data/')
+ke.authenticate_client(username, client_packet, loc='data/')
 ```
-If so, the client is authenticated and has the servers public key.
+If the function returns `True`, the client is authenticated and has the servers public key.  
+
+If client is not authenticated stop here. Otherwise, start the process
+establishing server authentication for the client.
+
 
 
 ## Client
@@ -33,3 +38,4 @@ result of the function below to the server.
 ```python
 ke.client_packet(password, server_public_key)
 ```
+To establish trust to the server.

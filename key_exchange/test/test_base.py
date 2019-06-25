@@ -1,6 +1,10 @@
+import os
+from pathlib import Path
+
 import cryptography
 import pytest
 
+from key_exchange.src import pass_management
 from key_exchange.src.base import KeyExchange
 
 
@@ -30,3 +34,22 @@ def test_message_encryption():
     plain_text = ke.decrypt_message(cipher_text)
     assert message == plain_text, \
         'plain_text must be equal to the initial message!'
+
+
+def test_get_public_bytes():
+    ke = KeyExchange()
+    ke.generate_private_key()
+    if not isinstance(ke.get_public_bytes(ke.public_key), bytes):
+        raise TypeError('get_public_bytes must return bytes!')
+
+
+def test_client_packet():
+    pass_management.create_password('password', 'pytest_username', loc='data/')
+    ke = KeyExchange()
+    ke.generate_private_key()
+    assert ke.client_packet('password',
+                            ke.public_key) == ke.returned_client_packet(
+        'pytest_username', loc='data/')
+
+    os.remove(
+        str(Path(pass_management.get_location('pytest_username', 'data/'))))

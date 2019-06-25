@@ -4,14 +4,24 @@
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
+
+from key_exchange.src.pass_management import hash_bytes, get_hashed_password
 
 
 class KeyExchange:
     def __init__(self):
         self.__private_key = None
         self.public_key = None
+
+    def client_packet(self, password, server_public_key):
+        public_bytes = self.get_public_bytes(server_public_key)
+        hashed_password = hash_bytes(password.encode())
+
+        new_pass = hashed_password + public_bytes
+        return hash_bytes(new_pass)
 
     def decrypt_message(self, cipher_text):
         return self.__private_key.decrypt(
@@ -40,3 +50,16 @@ class KeyExchange:
             backend=default_backend()
         )
         self.public_key = self.__private_key.public_key()
+
+    @staticmethod
+    def get_public_bytes(public_key):
+        return public_key.public_bytes(
+            encoding=serialization.Encoding.DER,
+            format=serialization.PublicFormat.PKCS1)
+
+    def returned_client_packet(self, username, loc='data/'):
+        public_bytes = self.get_public_bytes(self.public_key)
+        hashed_password = get_hashed_password(username, loc)
+
+        new_pass = hashed_password + public_bytes
+        return hash_bytes(new_pass)

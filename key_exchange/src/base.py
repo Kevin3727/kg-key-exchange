@@ -23,19 +23,29 @@ class KeyExchange:
         new_pass = hashed_password + public_bytes
         return hash_bytes(new_pass) == self.decrypt_message(client_packet)
 
-    def authenticate_server(self, password, client_packet):
+    def authenticate_server(self, password, received_packet):
         public_bytes = self.get_public_bytes(self.public_key)
         hashed_password = hash_bytes(password.encode())
 
         new_pass = hashed_password + public_bytes
-        return hash_bytes(new_pass) == self.decrypt_message(client_packet)
+        return hash_bytes(new_pass) == self.decrypt_message(received_packet)
 
     def client_packet(self, password, server_public_key):
         public_bytes = self.get_public_bytes(server_public_key)
-        hashed_password = hash_bytes(password.encode())
+        if isinstance(password, bytes):
+            encoded_password = password
+        else:
+            encoded_password = password.encode()
+        hashed_password = hash_bytes(encoded_password)
 
         new_pass = hashed_password + public_bytes
-        return self.encrypt_message(hash_bytes(new_pass))
+        return self.encrypt_message(hash_bytes(new_pass), server_public_key)
+
+    def server_packet(self, hashed_password, client_public_key):
+        public_bytes = self.get_public_bytes(client_public_key)
+
+        new_pass = hashed_password + public_bytes
+        return self.encrypt_message(hash_bytes(new_pass), client_public_key)
 
     def decrypt_message(self, cipher_text):
         return self.__private_key.decrypt(

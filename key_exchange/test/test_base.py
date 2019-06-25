@@ -45,6 +45,8 @@ def test_get_public_bytes():
 
 def test_client_packet():
     pass_management.create_password('password', 'pytest_username', loc='data/')
+
+    # server authentication
     ke = KeyExchange()
     ke.generate_private_key()
     assert ke.authenticate_client(
@@ -52,5 +54,16 @@ def test_client_packet():
         ke.client_packet('password', ke.public_key),
         loc='data/')
 
+    # client authentication
+    ke_client = KeyExchange()
+    ke_client.generate_private_key()
+
+    hashed_pass = pass_management.get_hashed_password('pytest_username',
+                                                      loc='data/')
+    server_packet = ke.server_packet(hashed_pass, ke_client.public_key)
+
+    assert ke_client.authenticate_server('password', server_packet)
+
+    # cleanup
     os.remove(
         str(Path(pass_management.get_location('pytest_username', 'data/'))))

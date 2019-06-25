@@ -19,7 +19,7 @@ def create_password(password, username, loc='data/'):
 
 
 def hash_bytes(arg):
-    return hashlib.sha256(arg).digest()
+    return hashlib.sha512(arg).digest()
 
 
 def get_hashed_password(username, loc='data/'):

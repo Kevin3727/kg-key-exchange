@@ -36,7 +36,7 @@ use the output as the client's public key (not established yet).
 Send the what the function below returns to the client:
 ```python
 from key_exchange.src.pass_management import get_hashed_password
-ke.client_packet(get_hashed_password(username, loc='data/'), client_public_key)
+ke.server_packet(get_hashed_password(username, loc='data/'), client_public_key)
 ```
 Now, you can establish a Diffie-Hellman key exchange using these public keys.
 
@@ -61,7 +61,7 @@ ke.encrypt_message(self.public_key, encryption_public_key=server_public_key)
 ```
 uses the packet that server sent back
 ```python
-ke.authenticate_server(password, client_packet)
+ke.authenticate_server(password, server_packet)
 ```
 If `True`, server is authenticated and `server_public_key` is correct.
 

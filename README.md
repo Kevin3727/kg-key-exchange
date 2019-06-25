@@ -33,6 +33,8 @@ Decrypt the second packet received from the client
 ke.decrypt_message(second_client_packet)
 ```
 
+will be completed ....
+
 
 ## Client
 #### client authentication
@@ -52,3 +54,5 @@ server's public key, and send it to the server.
 ke.generate_private_key()
 ke.encrypt_message(self.public_key, encryption_public_key=server_public_key)
 ```
+
+will be completed ....

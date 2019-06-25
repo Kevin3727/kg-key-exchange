@@ -10,16 +10,17 @@ and may have vulnerabilities.
 from key_exchange.src.base import KeyExchange
 ke = KeyExchange()
 ```
-generate one time private key. Do not reuse this key if connection failed.
+generate a one-time private key. Do not reuse this key if the connection
+failed.
 ```python
 ke.generate_private_key()
 ```
 send `ke.public_key` to the client.
-The packet that is received from the client must me equal to:
+The packet that is received from the client must be equal to:
 ```python
 ke.returned_client_packet(username, loc='data/')
 ```
-If so, client is authenticated and has the servers public key.
+If so, the client is authenticated and has the servers public key.
 
 
 ## Client

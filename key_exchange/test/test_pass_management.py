@@ -1,4 +1,3 @@
-import hashlib
 import os
 from pathlib import Path
 
@@ -33,9 +32,16 @@ def test_create_password():
         str(Path(pass_management.get_location('pytest_username', 'data/'))))
 
 
+def test_hash_bytes():
+    if not isinstance(pass_management.hash_bytes('test'.encode()), bytes):
+        raise TypeError('hash_bytes must return binary!')
+    assert pass_management.hash_bytes(b'test') != b'test', \
+        "hash_bytes doesn't do anything!"
+
+
 def test_get_hashed_password():
     pass_management.create_password('password', 'pytest_username', loc='data/')
-    hashed_pass = hashlib.sha256('password'.encode()).digest()
+    hashed_pass = pass_management.hash_bytes('password'.encode())
     read_hashed_pass = pass_management.get_hashed_password('pytest_username',
                                                            loc='data/')
 
@@ -46,10 +52,3 @@ def test_get_hashed_password():
 
     os.remove(
         str(Path(pass_management.get_location('pytest_username', 'data/'))))
-
-
-def test_hash_bytes():
-    if not isinstance(pass_management.hash_bytes('test'.encode()), bytes):
-        raise TypeError('hash_bytes must return binary!')
-    assert pass_management.hash_bytes(b'test') != b'test', \
-        "hash_bytes doesn't do anything!"

@@ -1,7 +1,10 @@
 import pytest
-
+import cryptography
 from key_exchange.src.base import KeyExchange
 
+def test_version():
+    assert float(cryptography.__version__) >= 2.7,\
+        'cryptography library is out of date, download version 2.7 of later!'
 
 def test_generate_private_key():
     ke = KeyExchange()
@@ -22,5 +25,5 @@ def test_message_encryption():
     ke.generate_private_key()
     cipher_text = ke.encrypt_message(message)
     plain_text = ke.decrypt_message(cipher_text)
-    assert message == plain_text, 'plain_text must be equal to the initial ' \
-                                  'message'
+    assert message == plain_text,\
+        'plain_text must be equal to the initial message!'

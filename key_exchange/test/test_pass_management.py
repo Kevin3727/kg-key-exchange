@@ -46,3 +46,10 @@ def test_get_hashed_password():
 
     os.remove(
         str(Path(pass_management.get_location('pytest_username', 'data/'))))
+
+
+def test_hash_bytes():
+    if not isinstance(pass_management.hash_bytes('test'.encode()), bytes):
+        raise TypeError('hash_bytes must return binary!')
+    assert pass_management.hash_bytes(b'test') != b'test', \
+        "hash_bytes doesn't do anything!"

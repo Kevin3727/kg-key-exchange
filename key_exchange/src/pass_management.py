@@ -15,7 +15,11 @@ def create_password(password, username, loc='data/'):
     """
     location = get_location(username, loc)
     with open(location, 'wb') as f:
-        f.write(hashlib.sha256(password.encode()).digest())
+        f.write(hash_bytes(password.encode()))
+
+
+def hash_bytes(arg):
+    return hashlib.sha256(arg).digest()
 
 
 def get_hashed_password(username, loc='data/'):

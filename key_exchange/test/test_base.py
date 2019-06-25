@@ -1,3 +1,5 @@
+import pytest
+
 from key_exchange.src.base import KeyExchange
 
 
@@ -5,6 +7,13 @@ def test_generate_private_key():
     ke = KeyExchange()
     ke.generate_private_key()
     assert ke.public_key is not None
+
+
+def test_security():
+    ke = KeyExchange()
+    with pytest.raises(AttributeError) as e_info:
+        # private key should not be public
+        ke.__private_key
 
 
 def test_message_encryption():

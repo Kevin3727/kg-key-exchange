@@ -1,5 +1,5 @@
 # key-exchange module
-This key exchange is not venerable to middle man attacks.  
+This is a key exchange method that is not venerable to middle man attacks.  
 
 __Disclaimer__: use at your own discretion. This module is at its testing process
 and may have vulnerabilities. 

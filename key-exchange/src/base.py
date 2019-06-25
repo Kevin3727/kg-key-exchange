@@ -13,8 +13,8 @@ class KeyExchange:
         return self.__private_key.decrypt(
             cipher_text,
             padding.OAEP(
-                padding.MGF1(algorithm=hashes.SHA256()),
-                algorithm=hashes.SHA256(),
+                padding.MGF1(algorithm=hashes.SHA512()),
+                algorithm=hashes.SHA512(),
                 label=None
             )
         )
@@ -23,8 +23,8 @@ class KeyExchange:
         return self.public_key.encrypt(
             message,
             padding.OAEP(
-                mgf=padding.MGF1(algorithm=hashes.SHA256()),
-                algorithm=hashes.SHA256(),
+                mgf=padding.MGF1(algorithm=hashes.SHA512()),
+                algorithm=hashes.SHA512(),
                 label=None
             )
         )

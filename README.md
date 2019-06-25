@@ -17,21 +17,25 @@ failed.
 ke.generate_private_key()
 ```
 send `ke.public_key` to the client.
-Use the first packet that is received from the client (`client_packet`) in the
-function below.
+Use the first packet that is received from the client (`first_client_packet`)
+in the function below.
 ```python
-ke.authenticate_client(username, client_packet, loc='data/')
+ke.authenticate_client(username, first_client_packet, loc='data/')
 ```
 If the function returns `True`, the client is authenticated and has the servers
-public key.  
+public key.
 
+#### server authentication
 If the client is not authenticated stop here. Otherwise, start the process of
-establishing server authentication for the client.
-
-
+establishing server authentication for the client.   
+Decrypt the second packet received from the client
+```python
+ke.decrypt_message(second_client_packet)
+```
 
 
 ## Client
+#### client authentication
 ```python
 from key_exchange.src.base import KeyExchange
 ke = KeyExchange()
@@ -41,4 +45,10 @@ result of the function below to the server.
 ```python
 ke.client_packet(password, server_public_key)
 ```
-To establish trust to the server.
+#### server authentication
+To establish trust to the server. Generate a public key, encrypt it with the
+server's public key, and send it to the server.
+```python
+ke.generate_private_key()
+ke.encrypt_message(self.public_key, encryption_public_key=server_public_key)
+```

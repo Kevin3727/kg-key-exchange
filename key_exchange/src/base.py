@@ -33,8 +33,10 @@ class KeyExchange:
             )
         )
 
-    def encrypt_message(self, message):
-        return self.public_key.encrypt(
+    def encrypt_message(self, message, encryption_public_key=None):
+        if encryption_public_key is None:
+            encryption_public_key = self.public_key
+        return encryption_public_key.encrypt(
             message,
             padding.OAEP(
                 mgf=padding.MGF1(algorithm=hashes.SHA512()),
